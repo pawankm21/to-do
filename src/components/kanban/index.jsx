@@ -2,7 +2,8 @@ import Column from "./column"
 import { ReactComponent as SearchIcon } from "../../assets/search.svg";
 import { ReactComponent as FilterIcon } from "../../assets/filter.svg";
 import Expand from "./expand";
-import { useSelector ,useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../store/auth-slice";
 export default function Kanban() {
     const user = useSelector(state => state.auth.user.name)
     const dispatch = useDispatch();
