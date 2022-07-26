@@ -5,7 +5,7 @@ import Expand from "./expand";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/auth-slice";
 export default function Kanban() {
-    const user = useSelector(state => state.auth.user.name)
+    const user = useSelector(state => state.auth.user.displayName)
     const dispatch = useDispatch();
     function handleLogout() {
         dispatch(logout());
