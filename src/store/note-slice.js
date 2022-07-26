@@ -15,7 +15,7 @@ const noteSlice = createSlice({
             const newNote = {
                 title: "",
                 description: "",
-                createdBy: "",
+                createdBy: true,
                 type,
                 id,
             }

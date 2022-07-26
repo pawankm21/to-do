@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+var initialState = {
     note: {},
     expand:false,
 };

@@ -1,5 +1,11 @@
 import { initializeApp } from "firebase/app";
-
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    getAuth,
+} from "firebase/auth";
 const firebaseConfig = {
     apiKey: "AIzaSyAd9vku7gZwAy1FF64kq4EPHQj2sv_jnNw",
     authDomain: "to-do-3fafa.firebaseapp.com",
@@ -9,5 +15,13 @@ const firebaseConfig = {
     appId: "1:288282243382:web:c29713f5110925dad60397"
 };
 
+initializeApp(firebaseConfig);
+const auth = getAuth();
 
-export const app = initializeApp(firebaseConfig);
+export {
+    auth,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signOut
+}

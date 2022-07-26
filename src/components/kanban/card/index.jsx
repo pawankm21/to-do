@@ -54,7 +54,7 @@ export default function Card({ note }) {
 
             </div>
             <div>
-                {!createdBy ? <ProfileIcon /> : <img src={createdBy} className="w-[25px] h-[25px] rounded-full border border-[#E1E1E1]" />}
+                {!createdBy ? <ProfileIcon /> : <img src="/profile.png" className="w-[25px] h-[25px] rounded-full border border-[#E1E1E1]" />}
             </div>
         </motion.button>
     )
