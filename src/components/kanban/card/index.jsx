@@ -13,7 +13,6 @@ export default function Card({ note }) {
   
             }}
             onDragEnd={(e, info) => {
-                ;
                 if (type === "To Do") {
                     if (info.offset.x > 600) {
                         dispatch(changeNote({ type: "Completed", note }));
