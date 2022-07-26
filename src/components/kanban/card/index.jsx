@@ -17,24 +17,28 @@ export default function Card({ note }) {
                 if (type === "To Do") {
                     if (info.offset.x > 600) {
                         dispatch(changeNote({ type: "Completed", note }));
+                        return;
                     }
-                    if (info.offset.x > 300) {
+                    else if (info.offset.x > 300) {
                         dispatch(changeNote({ type: "In Progress", note }));
                     }
                 }
                 if (type === "In Progress") {
                     if (info.offset.x < -300) {
                         dispatch(changeNote({ type: "To Do", note }));
+                        return;
                     }
-                    if (info.offset.x > 300) {
+                    else if (info.offset.x > 300) {
                         dispatch(changeNote({ type: "Completed", note }));
+                        return;
                     }
                 }
                 if (type === "Completed") {
                     if (info.offset.x < -600) {
                         dispatch(changeNote({ type: "To Do", note }));
+                        return;
                     }
-                    if (info.offset.x < -300) {
+                    else if (info.offset.x < -300) {
                         dispatch(changeNote({ type: "In Progress", note }));
                     }
 
