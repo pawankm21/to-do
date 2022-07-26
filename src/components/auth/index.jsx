@@ -2,34 +2,65 @@ import { Tab } from "@headlessui/react";
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signOut,
+    updateProfile,
     auth
 } from "../../firebase.config";
+import { login } from "../../store/auth-slice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 export default function Auth() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [name, setName] = useState("");
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [profilePic, setProfilePic] = useState('');
     const dispatch = useDispatch();
-    function loginToApp(e) {
+
+    const loginToApp = (e) => {
         e.preventDefault();
-        signInWithEmailAndPassword(email, password).then(user => {
-            dispatch(login(user));
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userAuth) => {
+                dispatch(
+                    login({
+                        email: userAuth.user.email,
+                        uid: userAuth.user.uid,
+                        displayName: userAuth.user.displayName,
+                    }));
+            }).catch((err) => {
+                alert(err);
+            });
+    };
+
+    const signUpToApp = () => {
+        if (!name) {
+            return alert('Please enter a full name');
         }
-        ).catch(error => {
-            console.log(error);
-        }
-        );
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userAuth) => {
+                updateProfile(userAuth.user, {
+                    displayName: name,
+                }).then(dispatch(
+                    login({
+                        email: userAuth.user.email,
+                        uid: userAuth.user.uid,
+                        displayName: name,
+
+                    })))
+                    .catch((error) => {
+                        console.log('user not updated');
+                    });
+            })
+            .catch((err) => {
+                alert(err);
+            });
+    };
+    function handleEmail(e) {
+        setEmail(e.target.value);
     }
-    function signUpToApp() {
-        createUserWithEmailAndPassword(auth, email, password).then(user => {
-            dispatch(login(user));
-        }
-        ).catch(error => {
-            console.log(error);
-        }
-        );
+    function handlePassword(e) {
+        setPassword(e.target.value);
+    }
+    function handleName(e) {
+        setName(e.target.value);
     }
 
     return (
@@ -51,8 +82,8 @@ export default function Auth() {
 
                                     <h1 className="text-[21px] font-medium">To Continue</h1>
                                     <p className="text-[#999999] text-[10px]">We need you name and email</p>
-                                    <input type="email" required placeholder="Email" className="mt-8 py-4 px-5 outline-none rounded-xl border border-[#1A3B583D]" />
-                                    <input type="password" required className="mt-8 py-4 px-5 outline-none rounded-xl border border-[#1A3B583D]" placeholder="Password" />
+                                    <input type="email" required placeholder="Email" className="mt-8 py-4 px-5 outline-none rounded-xl border border-[#1A3B583D]" onChange={handleEmail} />
+                                    <input type="password" required className="mt-8 py-4 px-5 outline-none rounded-xl border border-[#1A3B583D]" placeholder="Password" onChange={handlePassword} />
                                     <button className=" rounded-xl bg-[#329C89] w-full mt-[30px] py-[14px] font-bold text-white" onClick={loginToApp} >Login</button>
                                     <div className="mt-10 px-4">
                                         <input type="checkbox" name="remember" className=" checked:bg-[#329C89]" />
@@ -60,9 +91,9 @@ export default function Auth() {
                                     </div>
                                 </Tab.Panel>
                                 <Tab.Panel as="div" className="grid min-w-[314px]">
-                                    <input type="text" className="mt-8 py-4 px-5 outline-none rounded-xl border border-[#1A3B583D]" placeholder="Full Name" />
-                                    <input required type="email" className="mt-8 py-4 px-5 outline-none rounded-xl border border-[#1A3B583D]" placeholder="Email" onChange={(e) => { e.target.value }} />
-                                    <input required type="password" className="mt-8 py-4 px-5 outline-none rounded-xl border border-[#1A3B583D]" placeholder="Password" onChange={(e) => { setPassword(e.target.value) }} />
+                                    <input type="text" required className="mt-8 py-4 px-5 outline-none rounded-xl border border-[#1A3B583D]" placeholder="Full Name" onChange={handleName} />
+                                    <input required type="email" className="mt-8 py-4 px-5 outline-none rounded-xl border border-[#1A3B583D]" placeholder="Email" onChange={handleEmail} />
+                                    <input required type="password" className="mt-8 py-4 px-5 outline-none rounded-xl border border-[#1A3B583D]" placeholder="Password" onChange={handlePassword} />
                                     <button className=" rounded-xl bg-[#329C89] w-full mt-[30px] py-[14px] font-bold text-white" onClick={signUpToApp}>Sign up</button>
                                     <div className="mt-10 px-4">
                                         <input required type="checkbox" name="remember" className=" checked:bg-[#329C89]" />

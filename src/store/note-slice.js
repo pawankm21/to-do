@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from 'uuid';
+import { useSelector } from 'react-redux';
 const initialState = {
     "To Do": {},
     "In Progress": {},
@@ -10,12 +11,13 @@ const noteSlice = createSlice({
     initialState,
     reducers: {
         addNote: (state, action) => {
-            const type = action.payload;
+            const type = action.payload.type;
+            const user = action.payload.user;
             const id = uuidv4();
             const newNote = {
                 title: "",
                 description: "",
-                createdBy: true,
+                createdBy: user,
                 type,
                 id,
             }

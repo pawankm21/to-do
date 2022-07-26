@@ -13,15 +13,15 @@ export default function Expand() {
     const dispatch = useDispatch();
     function handleClose(e) {
         e.stopPropagation();
-        dispatch(editNote({...note, title, description}));
+        dispatch(editNote({ ...note, title, description }));
         dispatch(close());
     }
     function handleTitleChange(e) {
-       setTitle(e.target.value);
+        setTitle(e.target.value);
         resizeInput(e);
     }
     function handleDesChange(e) {
-       setDescription(e.target.value);
+        setDescription(e.target.value);
         resizeInput(e);
     }
     return (
@@ -35,8 +35,9 @@ export default function Expand() {
                     <div className="rounded-lg w-12 border-[#329C89] border bg-[#329C89]" />
                     <div className="mt-16 ">
                         <div className="w-full flex gap-10 mb-[60px]">
-                            <div className="w-1/3 text-[#6B6B6B]">Created By</div>
-                            <div className="">{note.createdBy}</div>
+                            <div className="w-1/3 flex items-center text-[#6B6B6B]">Created By</div>
+                            <div className="flex gap-4 items-center justify-start">
+                                <img src="/profile.png" className='w-8 h-8 rounded-full border-2 border-gray-400' />{note.createdBy}</div>
                         </div>
                         <div className="w-full flex gap-10">
                             <div className="w-1/3 text-[#6B6B6B]">Description</div>
