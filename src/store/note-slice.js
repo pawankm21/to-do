@@ -1,25 +1,42 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-const initialState = [];
-
+import { v4 as uuidv4 } from 'uuid';
+const initialState = {
+    "To Do": {},
+    "In Progress": {},
+    "Completed": {}
+};
 const noteSlice = createSlice({
     name: "notes",
     initialState,
     reducers: {
         addNote: (state, action) => {
-            state.push(action.payload);
+            const type = action.payload;
+            const id = uuidv4();
+            const newNote = {
+                title: "",
+                description: "",
+                createdBy: "",
+                type,
+                id,
+            }
+            state[type][id] = newNote;
         },
         removeNote: (state, action) => {
-            state.splice(action.payload, 1);
-        },
-        reorderNote: (state, action) => {
-            state = action.payload;
+            delete state[action.payload.type][action.payload.id];
         },
         editNote: (state, action) => {
-            state[action.payload.index] = action.payload.note;
+            const { id, type, ...rest } = action.payload;
+            state[type][id] = { ...state[type][id], ...rest };
+        },
+
+        changeNote: (state, action) => {
+            const note = action.payload.note;
+            const type = action.payload.type;
+            delete state[note.type][note.id];
+            state[type][note.id] = { ...note, type };
         }
 
     }
 });
-export const { addNote, removeNote, reorderNote, editNote } = noteSlice.actions;
+export const { addNote, removeNote, editNote, changeNote } = noteSlice.actions;
 export default noteSlice.reducer;
