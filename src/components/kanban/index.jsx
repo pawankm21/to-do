@@ -30,7 +30,7 @@ export default function Kanban() {
                 </div>
             </div>
             <div className="grid grid-cols-3 gap-10 mt-[34px] relative min-h-[100vh]">
-                <Expand setIsOpen={setIsExpanded} isOpen={isExpanded} />
+                <Expand  />
                 <Column name={"To Do"}  />
                 <Column name={"In Progress"} />
                 <Column name={"Completed"} />
