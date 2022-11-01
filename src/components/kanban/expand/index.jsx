@@ -1,31 +1,33 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { close } from "../../../store/expand-slice";
+import { doc, db, setNotes } from "../../../firebase.config";
 import { editNote } from "../../../store/note-slice";
 export default function Expand() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const { note, expand } = useSelector((state) => state.expand);
   const dispatch = useDispatch();
+  const notes = useSelector((state) => state.notes);
+  const uid = useSelector((state) => state.auth.user.uid);
   const desRef = useRef(null);
-  function handleClose(e) {
+  async function handleClose(e) {
     e.stopPropagation();
     dispatch(editNote({ ...note, title, description }));
     dispatch(close());
+    setNotes(uid, notes);
   }
   function handleTitleChange(e) {
     setTitle(e.target.value);
-    resizeInput(e);
   }
   function handleDesChange(e) {
     setDescription(e.target.value);
-    resizeInput(e);
   }
   useEffect(() => {
     if (desRef.current) {
-      desRef.current.style.height= desRef.current.scrollHeight+"px";
+      desRef.current.style.height = desRef.current.scrollHeight + "px";
     }
-  }, [description,expand]);
+  }, [description, expand]);
   return (
     <>
       {expand ? (
@@ -53,7 +55,7 @@ export default function Expand() {
             <div className="py-8">
               <div className="w-full flex items-center gap-4 pb-8">
                 <div className=" text-[#6B6B6B]">Created By</div>
-                <div>
+                <div className="flex gap-4">
                   <img
                     src="/profile.png"
                     className="w-6 h-6 rounded-full border-2 border-gray-400"

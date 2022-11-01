@@ -10,7 +10,7 @@ import {
 import {
   getFirestore,
   collection,
-  addDoc,
+  setDoc,
   getDoc,
   doc,
 } from "firebase/firestore";
@@ -29,6 +29,17 @@ initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
 
+async function getNotes(uid, callback, action) {
+  const docRef = doc(db, "users", uid);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    callback(action());
+  }
+}
+async function setNotes(uid, notes) {
+  setDoc(doc(db, "users", uid), notes);
+}
+
 export {
   auth,
   db,
@@ -38,7 +49,9 @@ export {
   signOut,
   updateProfile,
   collection,
-  addDoc,
+  setDoc,
   getDoc,
   doc,
+  getNotes,
+  setNotes,
 };

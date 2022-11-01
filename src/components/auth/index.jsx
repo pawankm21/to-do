@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   auth,
+  setNotes,
 } from "../../firebase.config";
 import { login } from "../../store/auth-slice";
 export default function Auth() {
@@ -47,14 +48,15 @@ export default function Auth() {
       await updateProfile(userAuth.user, {
         displayName: name,
       });
+
       let loginInfo = {
         email: userAuth.user.email,
         uid: userAuth.user.uid,
         displayName: name,
       };
+      setNotes(userAuth.user.uid, loginInfo);
       dispatch(login(loginInfo));
     } catch (err) {
-      // alert(err);
       console.log(err);
       setDisplayLogin(true);
     }

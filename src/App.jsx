@@ -4,7 +4,7 @@ import Auth from "./components/auth";
 import Kanban from "./components/kanban";
 import { useSelector, useDispatch } from "react-redux";
 import { login, logout } from "./store/auth-slice";
-import { auth, onAuthStateChanged, getDoc, db, doc } from "./firebase.config";
+import { auth, onAuthStateChanged,doc,db,getNotes} from "./firebase.config";
 
 /*
 user:{
@@ -34,24 +34,15 @@ function App() {
           uid: userAuth.uid,
           displayName: userAuth.displayName,
         };
+        getNotes(userAuth.uid,dispatch,()=>{});
         dispatch(login(userData));
       } else {
         dispatch(logout());
       }
     });
   }, []);
-  async function getNotesOnLogin() {
-    const docRef = doc(db, "user");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      console.log("Document data", docSnap.data());
-    } else {
-      console.log("No such document!");
-    }
-  }
-  useEffect(() => {
-    // getNotesOnLogin();
-  }, []);
+
+
   return <div className="app">{user ? <Kanban /> : <Auth />}</div>;
 }
 
