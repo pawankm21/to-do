@@ -29,12 +29,13 @@ initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
 
-async function getNotes(uid, callback, action) {
+async function getNotes(uid) {
   const docRef = doc(db, "users", uid);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
-    callback(action());
+    return docSnap.data();
   }
+  return null;
 }
 async function setNotes(uid, notes) {
   setDoc(doc(db, "users", uid), notes);

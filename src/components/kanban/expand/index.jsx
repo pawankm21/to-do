@@ -15,7 +15,7 @@ export default function Expand() {
     e.stopPropagation();
     dispatch(editNote({ ...note, title, description }));
     dispatch(close());
-    setNotes(uid, notes);
+    await setNotes(uid, notes);
   }
   function handleTitleChange(e) {
     setTitle(e.target.value);

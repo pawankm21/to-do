@@ -7,16 +7,25 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   auth,
-  setNotes,
 } from "../../firebase.config";
 import { login } from "../../store/auth-slice";
 export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [profilePic, setProfilePic] = useState("");
   const [displayLogin, setDisplayLogin] = useState(true);
   const dispatch = useDispatch();
+
+  function handleEmail(e) {
+    setEmail(e.target.value);
+  }
+  function handlePassword(e) {
+    setPassword(e.target.value);
+  }
+  function handleName(e) {
+    setName(e.target.value);
+  }
+
   async function loginToApp(e) {
     e.preventDefault();
     try {
@@ -28,12 +37,12 @@ export default function Auth() {
       };
       dispatch(login(loginInfo));
     } catch (err) {
-      console.log(err);
       if (err.status === 400) {
         setDisplayLogin(false);
       }
     }
   }
+
   async function signUpToApp(e) {
     e.preventDefault();
     if (!name) {
@@ -54,21 +63,11 @@ export default function Auth() {
         uid: userAuth.user.uid,
         displayName: name,
       };
-      setNotes(userAuth.user.uid, loginInfo);
       dispatch(login(loginInfo));
     } catch (err) {
       console.log(err);
       setDisplayLogin(true);
     }
-  }
-  function handleEmail(e) {
-    setEmail(e.target.value);
-  }
-  function handlePassword(e) {
-    setPassword(e.target.value);
-  }
-  function handleName(e) {
-    setName(e.target.value);
   }
 
   return (
@@ -95,7 +94,7 @@ export default function Auth() {
           <div as="div" className="lg:mx-[112px]">
             <div className="border-t lg:pt-[37px] pt-4 lg:mt-0 mt-1 lg:pb-12">
               {displayLogin ? (
-                <Login handleEmail={handleEmail} loginToApp={loginToApp} />
+                <Login handleEmail={handleEmail} handlePassword={handlePassword} loginToApp={loginToApp} />
               ) : (
                 <Register
                   handleName={handleName}

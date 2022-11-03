@@ -1,49 +1,31 @@
-import { useEffect } from "react";
-import "./App.css";
-import Auth from "./components/auth";
-import Kanban from "./components/kanban";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { auth, onAuthStateChanged } from "./firebase.config";
 import { login, logout } from "./store/auth-slice";
-import { auth, onAuthStateChanged,doc,db,getNotes} from "./firebase.config";
+import { fetchNotes } from "./store/note-slice";
+import Kanban from "./components/kanban/index";
+import Auth from "./components/auth/index";
 
-/*
-user:{
-  notes:[
-    {
-      id:1,
-      title:"title",
-      note:"lorem ipsum",
-      date:"date",
-      status:"TO DO"| "IN PROGRESS" | "COMPLETED"
-    }
-  ]
-  name:"name"
-  email:"email"
-  photo:"photo"
-  password:"password"
-}
- */
 function App() {
-  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.user);
   useEffect(() => {
-    onAuthStateChanged(auth, (userAuth) => {
-      if (userAuth) {
-        const userData = {
-          email: userAuth.email,
-          uid: userAuth.uid,
-          displayName: userAuth.displayName,
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const userInfo = {
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
         };
-        getNotes(userAuth.uid,dispatch,()=>{});
-        dispatch(login(userData));
+
+        dispatch(login(userInfo));
+        dispatch(fetchNotes(userInfo.uid));
       } else {
         dispatch(logout());
       }
     });
   }, []);
-
-
-  return <div className="app">{user ? <Kanban /> : <Auth />}</div>;
+  return <div className="app">{isLoggedIn ? <Kanban /> : <Auth />}</div>;
 }
 
 export default App;

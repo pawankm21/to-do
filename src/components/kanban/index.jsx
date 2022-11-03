@@ -4,14 +4,15 @@ import { ReactComponent as FilterIcon } from "../../assets/filter.svg";
 import Expand from "./expand";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/auth-slice";
+import { signOut, auth } from "../../firebase.config";
 export default function Kanban() {
   const user = useSelector((state) => state.auth.user.displayName);
   const dispatch = useDispatch();
-  function handleLogout() {
-    dispatch(logout());
+  async function handleLogout() {
+    await signOut(auth).then(dispatch(logout));
   }
   return (
-    <div className="relative overflow-x-hidden w-full bg-[#FEFEFE] px-9 pt-16" >
+    <div className="relative overflow-x-hidden w-full bg-[#FEFEFE] px-9 pt-16">
       <div className="grid grid-cols-3 mb-20 ">
         <div className="col-span-2">
           <div className="flex items-center gap-3.5">
@@ -45,7 +46,10 @@ export default function Kanban() {
           <p className="text-[17px]">Filter</p>
         </div>
       </div>
-      <div className="lg:grid lg:grid-cols-3 flex-row gap-10 mt-[34px]" id="expand-container">
+      <div
+        className="lg:grid lg:grid-cols-3 flex-row gap-10 mt-[34px]"
+        id="expand-container"
+      >
         <Column name={"To Do"} />
         <Column name={"In Progress"} />
         <Column name={"Completed"} />
