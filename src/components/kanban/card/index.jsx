@@ -2,40 +2,41 @@ import { ReactComponent as ProfileIcon } from "../../../assets/profile.svg";
 import { motion } from "framer-motion";
 import { changeNote } from "../../../store/note-slice";
 import { open } from "../../../store/expand-slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 export default function Card({ note, noOfCards }) {
+  const uid = useSelector((state) => state.auth.user.uid);
   const { title, description, createdBy, type } = note;
   const dispatch = useDispatch();
   function handleDrag(e, info) {
     switch (type) {
       case "To Do":
         if (info.offset.x > 600 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "Completed", note }));
+          dispatch(changeNote({ type: "Completed", note, uid }));
         } else if (info.offset.x > 300 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "In Progress", note }));
+          dispatch(changeNote({ type: "In Progress", note, uid }));
         }
         break;
       case "In Progress":
         if (info.offset.x < -300 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "To Do", note }));
+          dispatch(changeNote({ type: "To Do", note, uid }));
         } else if (info.offset.x > 300 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "Completed", note }));
+          dispatch(changeNote({ type: "Completed", note, uid }));
         }
         break;
       case "Completed":
         if (info.offset.x < -600 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "To Do", note }));
+          dispatch(changeNote({ type: "To Do", note, uid }));
         } else if (info.offset.x < -300 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "In Progress", note }));
+          dispatch(changeNote({ type: "In Progress", note, uid }));
         }
         break;
     }
   }
   return (
     <motion.button
-        onClick={() => {
-          dispatch(open(note));
-        }}
+      onClick={() => {
+        dispatch(open(note));
+      }}
       onDragEnd={handleDrag}
       dragSnapToOrigin
       drag
@@ -63,7 +64,7 @@ export default function Card({ note, noOfCards }) {
           <ProfileIcon />
         ) : (
           <img
-            src="/profile.png"
+            src="/avatar.webp"
             className="w-[25px] h-[25px] rounded-full border border-[#E1E1E1]"
           />
         )}

@@ -50,8 +50,6 @@ export {
   signOut,
   updateProfile,
   collection,
-  setDoc,
-  getDoc,
   doc,
   getNotes,
   setNotes,

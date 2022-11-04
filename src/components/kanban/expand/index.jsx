@@ -1,21 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { close } from "../../../store/expand-slice";
-import { doc, db, setNotes } from "../../../firebase.config";
 import { editNote } from "../../../store/note-slice";
 export default function Expand() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const { note, expand } = useSelector((state) => state.expand);
+  const uid=useSelector((state)=>state.auth.user.uid);
   const dispatch = useDispatch();
-  const notes = useSelector((state) => state.notes);
-  const uid = useSelector((state) => state.auth.user.uid);
   const desRef = useRef(null);
   async function handleClose(e) {
     e.stopPropagation();
-    dispatch(editNote({ ...note, title, description }));
+    dispatch(editNote({ ...note, title, description,uid }));
     dispatch(close());
-    await setNotes(uid, notes);
   }
   function handleTitleChange(e) {
     setTitle(e.target.value);
@@ -57,7 +54,7 @@ export default function Expand() {
                 <div className=" text-[#6B6B6B]">Created By</div>
                 <div className="flex gap-4">
                   <img
-                    src="/profile.png"
+                    src="/avatar.webp"
                     className="w-6 h-6 rounded-full border-2 border-gray-400"
                   />
                   {note.createdBy}

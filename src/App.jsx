@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { auth, onAuthStateChanged } from "./firebase.config";
+import { auth, onAuthStateChanged, setNotes } from "./firebase.config";
 import { login, logout } from "./store/auth-slice";
 import { fetchNotes } from "./store/note-slice";
 import Kanban from "./components/kanban/index";
@@ -8,7 +8,8 @@ import Auth from "./components/auth/index";
 
 function App() {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.auth.user);
+  const userInfo = useSelector((state) => state.auth.user);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -25,7 +26,15 @@ function App() {
       }
     });
   }, []);
-  return <div className="app">{isLoggedIn ? <Kanban /> : <Auth />}</div>;
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+  return (
+    <div className="app">{!loading && (userInfo ? <Kanban /> : <Auth />)}</div>
+  );
 }
 
 export default App;

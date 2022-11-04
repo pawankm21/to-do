@@ -1,6 +1,6 @@
 import React from "react";
 import Input from "./Input";
-function Login({handleEmail,handlePassword,loginToApp}) {
+function Login({ handleEmail, handlePassword, loginToApp }) {
   return (
     <div as="div" className="grid lg:min-w-[314px]">
       <h1 className="lg:text-[21px] font-medium text-lg">To Continue</h1>
