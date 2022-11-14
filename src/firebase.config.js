@@ -30,14 +30,20 @@ const auth = getAuth();
 const db = getFirestore();
 
 async function getNotes(uid) {
+  console.log("called getNotes", uid);
   const docRef = doc(db, "users", uid);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     return docSnap.data();
   }
-  return null;
+  return {
+    "To Do": {},
+    "In Progress": {},
+    Completed: {},
+  };
 }
 async function setNotes(uid, notes) {
+  console.log("Called setNotes", uid,notes);
   setDoc(doc(db, "users", uid), notes);
 }
 

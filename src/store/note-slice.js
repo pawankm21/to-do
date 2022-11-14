@@ -6,17 +6,18 @@ export const fetchNotes = createAsyncThunk(
   "notes/fetchNotes",
   async (uid, thunkAPI) => {
     const response = await getNotes(uid);
-    console.log("Response", response);
     return response;
   }
 );
 export const postNotes = createAsyncThunk(
   "notes/postNotes",
-  async (uid, notes, thunkAPI) => {
+  async (data) => {
+    const {uid,notes}=data;
     await setNotes(uid, notes);
-  }  
+    const response = await getNotes(uid);
+    return response;
+  }
 );
-
 const initialState = {
   "To Do": {},
   "In Progress": {},
@@ -30,7 +31,6 @@ const noteSlice = createSlice({
     addNote: (state, action) => {
       const type = action.payload.type;
       const user = action.payload.user;
-      const uid = action.payload.uid;
       const id = uuidv4();
       const newNote = {
         title: "",
@@ -43,16 +43,15 @@ const noteSlice = createSlice({
     },
 
     removeNote: (state, action) => {
-      const uid = action.payload.uid;
       delete state[action.payload.type][action.payload.id];
     },
     editNote: (state, action) => {
-      const { id, type, uid, ...rest } = action.payload;
+      const { id, type, ...rest } = action.payload;
       state[type][id] = { ...state[type][id], ...rest };
     },
 
     changeNote: (state, action) => {
-      const { note, type, uid } = action.payload;
+      const { note, type } = action.payload;
       delete state[note.type][note.id];
       state[type][note.id] = { ...note, type };
     },
@@ -63,7 +62,11 @@ const noteSlice = createSlice({
       state["To Do"] = action.payload["To Do"];
       state["In Progress"] = action.payload["In Progress"];
     });
-    builder.addCase(postNotes.fulfilled);
+    builder.addCase(postNotes.fulfilled, (state, action) => {
+      state["Completed"] = action.payload["Completed"];
+      state["To Do"] = action.payload["To Do"];
+      state["In Progress"] = action.payload["In Progress"];
+    });
   },
 });
 export const { addNote, removeNote, editNote, changeNote } = noteSlice.actions;

@@ -1,18 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { close } from "../../../store/expand-slice";
-import { editNote } from "../../../store/note-slice";
+import { editNote, postNotes } from "../../../store/note-slice";
 export default function Expand() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const { note, expand } = useSelector((state) => state.expand);
-  const uid=useSelector((state)=>state.auth.user.uid);
+  const [title, setTitle] = useState(note.title);
+  const [description, setDescription] = useState(note.description);
+  const uid = useSelector((state) => state.auth.user.uid);
+  const notes = useSelector((state) => state.notes);
   const dispatch = useDispatch();
   const desRef = useRef(null);
   async function handleClose(e) {
     e.stopPropagation();
-    dispatch(editNote({ ...note, title, description,uid }));
+    dispatch(editNote({ ...note, title, description, uid }));
     dispatch(close());
+    await dispatch(postNotes({ notes, uid })).unwrap();
   }
   function handleTitleChange(e) {
     setTitle(e.target.value);
@@ -65,7 +67,7 @@ export default function Expand() {
                   className="pointer-events-auto text-lg font-medium my-[18px] outline-none w-full resize-y rounded  focus:ring ring-green-400 placeholder:-mx-4 p-2 h-full overflow-hidden"
                   onChange={handleDesChange}
                   placeholder="...Add notes"
-                  defaultValue={description}
+                  defaultValue={note.description}
                   ref={desRef}
                 />
               </div>

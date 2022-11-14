@@ -1,36 +1,38 @@
 import { ReactComponent as ProfileIcon } from "../../../assets/profile.svg";
 import { motion } from "framer-motion";
-import { changeNote } from "../../../store/note-slice";
+import { changeNote, postNotes } from "../../../store/note-slice";
 import { open } from "../../../store/expand-slice";
 import { useDispatch, useSelector } from "react-redux";
 export default function Card({ note, noOfCards }) {
-  const uid = useSelector((state) => state.auth.user.uid);
   const { title, description, createdBy, type } = note;
+  const notes = useSelector((state) => state.notes);
+  const uid = useSelector((state) => state.auth.user.uid);
   const dispatch = useDispatch();
-  function handleDrag(e, info) {
+  async function handleDrag(e, info) {
     switch (type) {
       case "To Do":
         if (info.offset.x > 600 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "Completed", note, uid }));
+          dispatch(changeNote({ type: "Completed", note }));
         } else if (info.offset.x > 300 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "In Progress", note, uid }));
+          dispatch(changeNote({ type: "In Progress", note }));
         }
         break;
       case "In Progress":
         if (info.offset.x < -300 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "To Do", note, uid }));
+          dispatch(changeNote({ type: "To Do", note }));
         } else if (info.offset.x > 300 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "Completed", note, uid }));
+          dispatch(changeNote({ type: "Completed", note }));
         }
         break;
       case "Completed":
         if (info.offset.x < -600 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "To Do", note, uid }));
+          dispatch(changeNote({ type: "To Do", note }));
         } else if (info.offset.x < -300 && window.visualViewport.width > 500) {
-          dispatch(changeNote({ type: "In Progress", note, uid }));
+          dispatch(changeNote({ type: "In Progress", note }));
         }
         break;
     }
+    await dispatch(postNotes({ notes, uid })).unwrap();
   }
   return (
     <motion.button
@@ -56,7 +58,11 @@ export default function Card({ note, noOfCards }) {
         {title ? title : "Give your task a title"}
       </h1>
       <p className={`${!description ? "text-[#A4ABB3]" : null} min-h-[46px] `}>
-        {description ? description : "Description..."}
+        {description
+          ? `${description.substring(0, 20)} ${
+              description.length > 20 ? "..." : ""
+            }`
+          : "Description..."}
       </p>
       <div></div>
       <div>

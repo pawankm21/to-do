@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { auth, onAuthStateChanged, setNotes } from "./firebase.config";
+import { auth, onAuthStateChanged } from "./firebase.config";
 import { login, logout } from "./store/auth-slice";
 import { fetchNotes } from "./store/note-slice";
 import Kanban from "./components/kanban/index";
 import Auth from "./components/auth/index";
-
 function App() {
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.auth.user);
@@ -33,7 +32,9 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
   return (
-    <div className="app">{!loading && (userInfo ? <Kanban /> : <Auth />)}</div>
+    <div className="app">
+        {!loading && (userInfo ? <Kanban /> : <Auth />)}
+    </div>
   );
 }
 
