@@ -5,9 +5,10 @@ import Expand from "./expand";
 import { useSelector } from "react-redux";
 import Settings from "./settings";
 import { selectUserName } from "../../store/auth-slice";
+import { isExpand } from "../../store/expand-slice";
 export default function Kanban() {
   const user = useSelector(selectUserName);
-
+  const expand = useSelector(isExpand);
   return (
     <div className="relative overflow-x-hidden w-full bg-[#FEFEFE] px-9 pt-16">
       <div className="grid grid-cols-3 mb-20 ">
@@ -42,7 +43,7 @@ export default function Kanban() {
         <Column name={"To Do"} />
         <Column name={"In Progress"} />
         <Column name={"Completed"} />
-        <Expand />
+        {expand ? <Expand /> : null}
       </div>
     </div>
   );

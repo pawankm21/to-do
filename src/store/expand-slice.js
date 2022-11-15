@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 var initialState = {
-    note: {},
+    note:{},
     expand:false,
 };
 const expandSlice = createSlice({
@@ -14,6 +14,7 @@ const expandSlice = createSlice({
         },
         close: (state) => {
             state.expand = false;
+            state.note={};
         }
     }
 });
