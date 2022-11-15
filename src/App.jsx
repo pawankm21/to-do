@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, onAuthStateChanged } from "./firebase.config";
-import { login, logout } from "./store/auth-slice";
+import { login, logout,selectUser } from "./store/auth-slice";
 import { fetchNotes } from "./store/note-slice";
 import Kanban from "./components/kanban/index";
 import Auth from "./components/auth/index";
 function App() {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.auth.user);
+  const userInfo = useSelector(selectUser);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -19,7 +19,7 @@ function App() {
         };
 
         dispatch(login(userInfo));
-        dispatch(fetchNotes(userInfo.uid));
+        // dispatch(fetchNotes(userInfo.uid));
       } else {
         dispatch(logout());
       }

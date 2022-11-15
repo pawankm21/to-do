@@ -4,7 +4,7 @@ import { getNotes, setNotes } from "../firebase.config";
 
 export const fetchNotes = createAsyncThunk(
   "notes/fetchNotes",
-  async (uid, thunkAPI) => {
+  async (uid) => {
     const response = await getNotes(uid);
     return response;
   }
@@ -69,5 +69,10 @@ const noteSlice = createSlice({
     });
   },
 });
+// selectors
+export const selectAllNotes=(state)=> state.notes
+export const selectNote=(state,noteId,type)=>state.notes[type][noteId];
+export const selectNotesByType=(state,type)=>state.notes[type];
+export const selectNoOfNotes=(state,type)=>Object.keys(state.notes[type]);
 export const { addNote, removeNote, editNote, changeNote } = noteSlice.actions;
 export default noteSlice.reducer;

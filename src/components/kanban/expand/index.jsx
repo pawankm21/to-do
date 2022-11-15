@@ -1,20 +1,26 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { close } from "../../../store/expand-slice";
-import { editNote, postNotes } from "../../../store/note-slice";
+import { selectUserId } from "../../../store/auth-slice";
+import {
+  close,
+  isExpand,
+  selectExpandedNote,
+} from "../../../store/expand-slice";
+import { editNote, postNotes, selectAllNotes } from "../../../store/note-slice";
 export default function Expand() {
-  const { note, expand } = useSelector((state) => state.expand);
+  const note = useSelector(selectExpandedNote);
+  const expand = useSelector(isExpand);
   const [title, setTitle] = useState(note.title);
   const [description, setDescription] = useState(note.description);
-  const uid = useSelector((state) => state.auth.user.uid);
-  const notes = useSelector((state) => state.notes);
+  // const uid = useSelector(selectUserId);
+  // const notes = useSelector(selectAllNotes);
   const dispatch = useDispatch();
   const desRef = useRef(null);
   async function handleClose(e) {
     e.stopPropagation();
-    dispatch(editNote({ ...note, title, description, uid }));
+    dispatch(editNote({ ...note, title, description }));
     dispatch(close());
-    await dispatch(postNotes({ notes, uid })).unwrap();
+    // await dispatch(postNotes({ notes, uid })).unwrap();
   }
   function handleTitleChange(e) {
     setTitle(e.target.value);
@@ -35,10 +41,10 @@ export default function Expand() {
           id="expand"
         >
           <div
-            className="absolute w-screen h-screen bg-transparent"
+            className="absolute w-screen h-full bg-transparent"
             onClick={handleClose}
           />
-          <div className="px-9 absolute top-0  right-0 w-1/2   h-screen  bg-white shadow-xl overflow-y-scroll z-10 ">
+          <div className="px-9 absolute top-0  right-0 w-1/2 h-full bg-white shadow-xl overflow-y-scroll z-10 ">
             <input
               onChange={handleTitleChange}
               onKeyDown={(e) => {

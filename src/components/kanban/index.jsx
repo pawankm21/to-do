@@ -4,8 +4,9 @@ import { ReactComponent as FilterIcon } from "../../assets/filter.svg";
 import Expand from "./expand";
 import { useSelector } from "react-redux";
 import Settings from "./settings";
+import { selectUserName } from "../../store/auth-slice";
 export default function Kanban() {
-  const user = useSelector((state) => state.auth.user.displayName);
+  const user = useSelector(selectUserName);
 
   return (
     <div className="relative overflow-x-hidden w-full bg-[#FEFEFE] px-9 pt-16">

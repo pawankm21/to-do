@@ -1,12 +1,17 @@
 import { ReactComponent as ProfileIcon } from "../../../assets/profile.svg";
 import { motion } from "framer-motion";
-import { changeNote, postNotes } from "../../../store/note-slice";
+import {
+  changeNote,
+  postNotes,
+  selectAllNotes,
+} from "../../../store/note-slice";
 import { open } from "../../../store/expand-slice";
 import { useDispatch, useSelector } from "react-redux";
-export default function Card({ note, noOfCards }) {
+import { selectUserId } from "../../../store/auth-slice";
+export default function Card({ note }) {
   const { title, description, createdBy, type } = note;
-  const notes = useSelector((state) => state.notes);
-  const uid = useSelector((state) => state.auth.user.uid);
+  const notes = useSelector(selectAllNotes);
+  const uid = useSelector(selectUserId);
   const dispatch = useDispatch();
   async function handleDrag(e, info) {
     switch (type) {
@@ -32,7 +37,7 @@ export default function Card({ note, noOfCards }) {
         }
         break;
     }
-    await dispatch(postNotes({ notes, uid })).unwrap();
+    // await dispatch(postNotes({ notes, uid })).unwrap();
   }
   return (
     <motion.button
