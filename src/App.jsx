@@ -8,7 +8,6 @@ import Auth from "./components/auth/index";
 function App() {
   const dispatch = useDispatch();
   const userInfo = useSelector(selectUser);
-  const [loading, setLoading] = useState(true);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -17,7 +16,6 @@ function App() {
           displayName: user.displayName,
           email: user.email,
         };
-
         dispatch(login(userInfo));
         // dispatch(fetchNotes(userInfo.uid));
       } else {
@@ -25,15 +23,10 @@ function App() {
       }
     });
   }, []);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
+
   return (
     <div className="app">
-        {!loading && (userInfo ? <Kanban /> : <Auth />)}
+        { (userInfo ? <Kanban /> : <Auth />)}
     </div>
   );
 }

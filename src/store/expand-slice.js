@@ -18,7 +18,7 @@ const expandSlice = createSlice({
     }
 });
 //selectors
-export const isExpand=state=>state.expand;
+export const isExpand=state=>state.expand.expand;
 export const selectExpandedNote=state=>state.expand.note;
 export const { open, close } = expandSlice.actions;
 export default expandSlice.reducer;

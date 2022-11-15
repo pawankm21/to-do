@@ -22,6 +22,8 @@ const initialState = {
   "To Do": {},
   "In Progress": {},
   Completed: {},
+  status: 'idle',
+  error: null
 };
 
 const noteSlice = createSlice({
@@ -73,6 +75,6 @@ const noteSlice = createSlice({
 export const selectAllNotes=(state)=> state.notes
 export const selectNote=(state,noteId,type)=>state.notes[type][noteId];
 export const selectNotesByType=(state,type)=>state.notes[type];
-export const selectNoOfNotes=(state,type)=>Object.keys(state.notes[type]);
+export const selectNoOfNotes=(state,type)=>Object.keys(state.notes[type]).length;
 export const { addNote, removeNote, editNote, changeNote } = noteSlice.actions;
 export default noteSlice.reducer;

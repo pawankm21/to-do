@@ -40,6 +40,8 @@ async function getNotes(uid) {
     "To Do": {},
     "In Progress": {},
     Completed: {},
+    status:"idle",
+    error: null
   };
 }
 async function setNotes(uid, notes) {
